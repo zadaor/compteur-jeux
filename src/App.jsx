@@ -3,11 +3,12 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import JeuYams from './pages/JeuYams';
 import Jeu5000 from './pages/Jeu5000';
+import './styles/globals.css';
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-red-900 text-white">
+      <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />

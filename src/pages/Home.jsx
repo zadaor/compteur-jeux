@@ -1,31 +1,42 @@
 import { Link } from 'react-router-dom';
+import Astre from '../components/Astre';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-red-900 text-white pb-16">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center mb-12">
-          Compteur de Points - Jeux de Société
-        </h1>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Link
-            to="/yams"
-            className="block p-8 bg-white text-gray-800 rounded-lg shadow-lg hover:bg-gray-100 transition-colors text-center"
-          >
-            <h2 className="text-2xl font-bold mb-4">Yam's</h2>
-            <p className="text-gray-600">Compteur de points pour le jeu de dés Yam's</p>
-          </Link>
-          
-          <Link
-            to="/5000"
-            className="block p-8 bg-white text-gray-800 rounded-lg shadow-lg hover:bg-gray-100 transition-colors text-center"
-          >
-            <h2 className="text-2xl font-bold mb-4">5000</h2>
-            <p className="text-gray-600">Compteur de points pour le jeu de cartes 5000</p>
-          </Link>
+    <div className="min-h-screen bg-[var(--bg)]">
+      {/* Hero Section */}
+      <section className="section">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Titre */}
+          <div className="hero-title mb-8">
+            <h1>Compteur de Points</h1>
+            <p className="mt-4 text-[var(--text-muted)]">
+              pour Jeux de Société
+            </p>
+          </div>
+
+          {/* Astre Central + Orbites */}
+          <div className="my-12">
+            <Astre />
+          </div>
+
+          {/* Boutons */}
+          <div className="flex justify-center gap-4 mt-8">
+            <Link
+              to="/yams"
+              className="btn btn-primary"
+            >
+              Yam's
+            </Link>
+            <Link
+              to="/5000"
+              className="btn btn-secondary"
+            >
+              5000
+            </Link>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
