@@ -1,51 +1,21 @@
-import { useState } from 'react';
-import { useGameState } from './hooks/useGameState';
-import PlayerList from './components/PlayerList';
-import AddPlayerForm from './components/AddPlayerForm';
-import GameHeader from './components/GameHeader';
-import QRCodeDisplay from './components/QRCodeDisplay';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import JeuYams from './pages/JeuYams';
+import Jeu5000 from './pages/Jeu5000';
 
 function App() {
-  const {
-    players, gameName, setGameName, addPlayer, removePlayer,
-    updateScore, incrementScore, resetGame, getRanking, getTotalScore
-  } = useGameState();
-  const [showQRCode, setShowQRCode] = useState(false);
-
   return (
-    <div className="min-h-screen bg-red-900 text-white pb-16">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        <GameHeader
-          gameName={gameName}
-          setGameName={setGameName}
-          onReset={resetGame}
-          onToggleQRCode={() => setShowQRCode(!showQRCode)}
-          playersCount={players.length}
-        />
-        
-        {showQRCode && (
-          <div className="mb-6 p-4 bg-white rounded-lg shadow">
-            <QRCodeDisplay />
-          </div>
-        )}
-        
-        <PlayerList
-          players={players}
-          ranking={getRanking()}
-          onRemovePlayer={removePlayer}
-          onUpdateScore={updateScore}
-          onIncrementScore={incrementScore}
-        />
-        
-        <AddPlayerForm onAddPlayer={addPlayer} />
-        
-        {players.length > 0 && (
-          <div className="mt-6 p-4 bg-white rounded-lg shadow text-center">
-            <p>Total : <span className="font-bold">{getTotalScore()}</span></p>
-          </div>
-        )}
+    <Router>
+      <div className="min-h-screen bg-red-900 text-white">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/yams" element={<JeuYams />} />
+          <Route path="/5000" element={<Jeu5000 />} />
+        </Routes>
       </div>
-    </div>
+    </Router>
   );
 }
 
