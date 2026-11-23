@@ -13,7 +13,7 @@ function App() {
   const [showQRCode, setShowQRCode] = useState(false);
 
   return (
-    <div className="min-h-screen bg-black text-white pb-16">
+    <div className="min-h-screen bg-red-900 text-white pb-16">
       <div className="max-w-2xl mx-auto px-4 py-8">
         <GameHeader
           gameName={gameName}
