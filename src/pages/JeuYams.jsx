@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Orbite from '../components/Orbite';
+import SlideInScore from '../components/SlideInScore';
 
 // Règles du Yam's organisées par catégories
 const YAMS_CATEGORIES = {
@@ -29,6 +30,8 @@ export default function JeuYams() {
   const [scores, setScores] = useState({});
   const [gameName, setGameName] = useState('Partie de Yam\'s');
   const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [showSlideIn, setShowSlideIn] = useState(false);
+  const [selectedCombination, setSelectedCombination] = useState(null);
 
   // Initialiser les scores pour chaque joueur
   useEffect(() => {
@@ -73,14 +76,18 @@ export default function JeuYams() {
     }));
   };
 
+  const handleScoreChipClick = (combination) => {
+    setSelectedCombination(combination);
+    setShowSlideIn(true);
+  };
+
   const calculateTotal = (playerId) => {
     const playerScores = scores[playerId] || {};
     let total = 0;
     for (const combo of ALL_COMBINATIONS) {
       const value = playerScores[combo];
       if (value !== null && value !== undefined) {
-        if (combo === 'Chance') total += value;
-        else total += YAMS_SCORES[combo] * (value || 0);
+        total += value;
       }
     }
     return total;
@@ -166,7 +173,7 @@ export default function JeuYams() {
 
         {/* Fiche du joueur sélectionné */}
         {selectedPlayer && players.length > 0 && (
-          <div className="card mb-6">
+          <div className="card mb-6 max-w-[45vw] md:max-w-[400px]">
             {/* Nom du joueur */}
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-medium">
@@ -183,7 +190,7 @@ export default function JeuYams() {
             {/* Zones de scores par catégorie */}
             <div className="space-y-4">
               {Object.entries(YAMS_CATEGORIES).map(([category, combinations]) => (
-                <div key={category} className="bg-[var(--surface)] p-4 rounded-lg">
+                <div key={category} className="bg-[var(--line)] p-4 rounded-xl">
                   <h3 className="text-sm font-medium text-[var(--accent)] mb-3">{category}</h3>
                   <div className="grid grid-cols-2 gap-2">
                     {combinations.map(combo => {
@@ -193,26 +200,22 @@ export default function JeuYams() {
                       return (
                         <button
                           key={combo}
-                          onClick={() => {
-                            // Si déjà sélectionné, on réinitialise
-                            if (isSelected) {
-                              updateScore(combo, null);
-                            } else {
-                              // Sinon, on met la valeur par défaut
-                              const defaultValue = combo === 'Chance' ? 0 : YAMS_SCORES[combo];
-                              updateScore(combo, defaultValue);
-                            }
-                          }}
-                          className={`w-full py-2 px-3 rounded-lg text-sm transition-all ${
-                            isSelected
-                              ? 'bg-[var(--accent-2)] text-[var(--on-accent)]'
-                              : 'bg-transparent border border-[var(--line)] text-[var(--text)] hover:bg-[var(--surface)]'
+                          onClick={() => handleScoreChipClick(combo)}
+                          className={`w-full py-2 px-3 rounded-lg text-sm transition-all border border-[var(--line)] ${
+                            isSelected && currentValue !== 0
+                              ? 'bg-[var(--accent-2)] text-[var(--on-accent)] border-transparent'
+                              : isSelected && currentValue === 0
+                              ? 'bg-transparent text-[var(--text-muted)] italic'
+                              : 'bg-transparent text-[var(--text)] hover:bg-[var(--surface)]'
                           }`}
                         >
                           <div className="flex justify-between items-center">
                             <span>{combo}</span>
                             {isSelected && currentValue !== 0 && (
-                              <span>+{YAMS_SCORES[combo] || currentValue}</span>
+                              <span className="font-medium">+{currentValue}</span>
+                            )}
+                            {isSelected && currentValue === 0 && (
+                              <span className="text-xs">×</span>
                             )}
                           </div>
                         </button>
@@ -226,7 +229,7 @@ export default function JeuYams() {
             {/* Total */}
             <div className="mt-4 pt-4 border-t border-[var(--line)] text-right">
               <span className="font-medium">Total: </span>
-              <span className="text-[var(--accent-2)] font-bold">
+              <span className="text-[var(--accent-2)] font-bold text-xl">
                 {calculateTotal(selectedPlayer)}
               </span>
             </div>
@@ -254,6 +257,18 @@ export default function JeuYams() {
             </button>
           </form>
         </div>
+
+        {/* Slide-in pour la sélection des scores */}
+        <SlideInScore
+          isOpen={showSlideIn}
+          onClose={() => setShowSlideIn(false)}
+          combination={selectedCombination}
+          onSelectScore={(value) => {
+            updateScore(selectedCombination, value);
+            setShowSlideIn(false);
+          }}
+          currentValue={selectedCombination ? getScoreValue(selectedCombination) : null}
+        />
 
         {/* Légende */}
         <div className="mt-8 card">
