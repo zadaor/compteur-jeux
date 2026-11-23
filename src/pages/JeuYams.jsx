@@ -2,21 +2,6 @@ import { useState, useEffect } from 'react';
 import Orbite from '../components/Orbite';
 import SlideInScore from '../components/SlideInScore';
 
-// Règles du Yam's organisées par catégories
-const YAMS_CATEGORIES = {
-  'As et figures': ['1', '2', '3', '4', '5', '6'],
-  'Suites': ['Petite Suite', 'Grande Suite'],
-  'Combinations': ['Brelan', 'Carré', 'Full'],
-  'Spécial': ['Yams', 'Chance']
-};
-
-// Points par combinaison
-const YAMS_SCORES = {
-  '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6,
-  'Brelan': 30, 'Carré': 40, 'Full': 50,
-  'Petite Suite': 30, 'Grande Suite': 40, 'Yams': 50
-};
-
 // Liste complète des combinaisons dans l'ordre
 const ALL_COMBINATIONS = [
   '1', '2', '3', '4', '5', '6',
@@ -24,6 +9,13 @@ const ALL_COMBINATIONS = [
   'Petite Suite', 'Grande Suite',
   'Yams', 'Chance'
 ];
+
+// Points par combinaison (pour référence)
+const YAMS_SCORES = {
+  '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6,
+  'Brelan': 30, 'Carré': 40, 'Full': 50,
+  'Petite Suite': 30, 'Grande Suite': 40, 'Yams': 50
+};
 
 export default function JeuYams() {
   const [players, setPlayers] = useState([]);
@@ -39,7 +31,7 @@ export default function JeuYams() {
       const initialScores = {};
       players.forEach(player => {
         initialScores[player.id] = ALL_COMBINATIONS.reduce((acc, combo) => {
-          acc[combo] = null; // null = non rempli, 0 = zéro
+          acc[combo] = null;
           return acc;
         }, {});
       });
@@ -108,15 +100,15 @@ export default function JeuYams() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] p-2 sm:p-4">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-[var(--bg)] p-2 sm:p-3">
+      <div className="max-w-3xl mx-auto">
         {/* Décoration : orbite en haut à droite */}
         <div className="absolute top-0 right-0 w-64 h-64 opacity-20 pointer-events-none">
           <Orbite size={200} planetColor="var(--accent-2)" />
         </div>
 
         {/* En-tête */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-3">
           <h1
             className="text-lg sm:text-xl font-medium cursor-pointer"
             onClick={() => {
@@ -139,15 +131,18 @@ export default function JeuYams() {
 
         {/* Grille des joueurs - 2 colonnes sur mobile, 3+ sur desktop */}
         {players.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 mb-3">
             {players.map(player => (
-              <div key={player.id} className="card compact-card">
+              <div 
+                key={player.id} 
+                className="bg-[var(--surface)] rounded-xl p-2"
+              >
                 {/* Header du joueur */}
                 <div className="flex justify-between items-center mb-2">
-                  <h2 className="text-base font-medium truncate flex-1">{player.name}</h2>
+                  <h2 className="text-sm font-medium truncate flex-1">{player.name}</h2>
                   <button
                     onClick={() => resetPlayerScores(player.id)}
-                    className="text-xs text-[var(--text-muted)] hover:text-[var(--accent-3)] ml-2"
+                    className="text-xs text-[var(--text-muted)] hover:text-[var(--accent-3)] ml-1"
                     title="Réinitialiser scores"
                   >
                     ↻
@@ -161,47 +156,48 @@ export default function JeuYams() {
                   </button>
                 </div>
 
-                {/* Scores par catégorie - très compact */}
-                <div className="space-y-2">
-                  {Object.entries(YAMS_CATEGORIES).map(([category, combinations]) => (
-                    <div key={category} className="bg-[var(--line)] p-2 rounded-lg">
-                      <h3 className="text-[0.65rem] sm:text-xs font-medium text-[var(--accent)] mb-1 truncate">
-                        {category}
-                      </h3>
-                      <div className="grid grid-cols-2 gap-1">
-                        {combinations.map(combo => {
-                          const currentValue = getScoreValue(player.id, combo);
-                          const isSelected = currentValue !== null;
-                          const isBarré = currentValue === 0;
-                          
-                          return (
-                            <button
-                              key={combo}
-                              onClick={() => handleScoreChipClick(player.id, combo)}
-                              className={`w-full py-1 px-2 rounded-full text-[0.7rem] sm:text-xs transition-all border ${
-                                isSelected && !isBarré
-                                  ? 'bg-[var(--accent-2)] text-[var(--on-accent)] border-transparent'
-                                  : isBarré
-                                  ? 'bg-transparent border-[var(--accent-3)] text-[var(--accent-3)]'
-                                  : 'bg-transparent border-[var(--line)] text-[var(--text)] hover:bg-[var(--line)]'
-                              }`}
-                              title={combo}
-                            >
-                              <div className="flex justify-between items-center">
-                                <span className="truncate">{combo}</span>
-                                {isSelected && !isBarré && (
-                                  <span className="font-medium text-[0.65rem]">+{currentValue}</span>
-                                )}
-                                {isBarré && (
-                                  <span className="text-[0.6rem] opacity-50">×</span>
-                                )}
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
+                {/* Grille de scores - sans titres de catégories */}
+                <div className="grid grid-cols-3 gap-1">
+                  {ALL_COMBINATIONS.map(combo => {
+                    const currentValue = getScoreValue(player.id, combo);
+                    const isSelected = currentValue !== null;
+                    const isBarré = currentValue === 0;
+                    
+                    // Abréviations pour gagner de la place
+                    const displayText = {
+                      'Petite Suite': 'PS',
+                      'Grande Suite': 'GS',
+                      'Carré': 'Carré',
+                      'Full': 'Full',
+                      'Yams': 'Yams',
+                      'Chance': 'Chance'
+                    }[combo] || combo;
+                    
+                    return (
+                      <button
+                        key={combo}
+                        onClick={() => handleScoreChipClick(player.id, combo)}
+                        className={`w-full py-1.5 px-2 rounded-full text-[0.65rem] sm:text-xs transition-all border ${
+                          isSelected && !isBarré
+                            ? 'bg-[var(--accent-2)] text-[var(--on-accent)] border-transparent'
+                            : isBarré
+                            ? 'bg-transparent border-[var(--accent-3)] text-[var(--accent-3)]'
+                            : 'bg-transparent border-[var(--line)] text-[var(--text)] hover:bg-[var(--line)]'
+                        }`}
+                        title={combo}
+                      >
+                        <div className="flex justify-between items-center">
+                          <span className="truncate">{displayText}</span>
+                          {isSelected && !isBarré && (
+                            <span className="font-medium text-[0.6rem]">+{currentValue}</span>
+                          )}
+                          {isBarré && (
+                            <span className="text-[0.55rem] opacity-50">×</span>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {/* Total */}
@@ -217,7 +213,7 @@ export default function JeuYams() {
         )}
 
         {/* Ajouter un joueur */}
-        <div className="mt-4">
+        <div className="mt-3">
           <form 
             onSubmit={(e) => { 
               e.preventDefault(); 
@@ -238,9 +234,9 @@ export default function JeuYams() {
           </form>
         </div>
 
-        {/* Légende (optionnelle, peut être supprimée pour gagner de la place) */}
+        {/* Message vide */}
         {players.length === 0 && (
-          <div className="mt-6 card text-center text-sm text-[var(--text-muted)]">
+          <div className="mt-6 text-center text-sm text-[var(--text-muted)]">
             <p>Ajoute des joueurs pour commencer à compter les points</p>
           </div>
         )}
