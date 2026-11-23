@@ -196,26 +196,27 @@ export default function JeuYams() {
                     {combinations.map(combo => {
                       const currentValue = getScoreValue(combo);
                       const isSelected = currentValue !== null;
+                      const isBarré = currentValue === 0;
                       
                       return (
                         <button
                           key={combo}
                           onClick={() => handleScoreChipClick(combo)}
-                          className={`w-full py-2 px-3 rounded-lg text-sm transition-all border border-[var(--line)] ${
-                            isSelected && currentValue !== 0
+                          className={`w-full py-2 px-3 rounded-full text-sm transition-all border ${
+                            isSelected && !isBarré
                               ? 'bg-[var(--accent-2)] text-[var(--on-accent)] border-transparent'
-                              : isSelected && currentValue === 0
-                              ? 'bg-transparent text-[var(--text-muted)] italic'
-                              : 'bg-transparent text-[var(--text)] hover:bg-[var(--surface)]'
+                              : isBarré
+                              ? 'bg-transparent border-[var(--accent-3)] text-[var(--accent-3)]'
+                              : 'bg-transparent border-[var(--line)] text-[var(--text)] hover:bg-[var(--line)]'
                           }`}
                         >
                           <div className="flex justify-between items-center">
                             <span>{combo}</span>
-                            {isSelected && currentValue !== 0 && (
+                            {isSelected && !isBarré && (
                               <span className="font-medium">+{currentValue}</span>
                             )}
-                            {isSelected && currentValue === 0 && (
-                              <span className="text-xs">×</span>
+                            {isBarré && (
+                              <span className="text-xs opacity-50">×</span>
                             )}
                           </div>
                         </button>
