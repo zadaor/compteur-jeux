@@ -72,6 +72,15 @@ p, span, div, li, a {
   box-shadow: none;
 }
 
+/* Cartes compactes pour les joueurs (grille) */
+.compact-card {
+  border-radius: 20px;
+  background-color: var(--surface);
+  padding: 12px;
+  border: none;
+  box-shadow: none;
+}
+
 /* Grands blocs → Très arrondi */
 .hero, .showcase {
   border-radius: 40px;

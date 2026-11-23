@@ -29,9 +29,9 @@ export default function JeuYams() {
   const [players, setPlayers] = useState([]);
   const [scores, setScores] = useState({});
   const [gameName, setGameName] = useState('Partie de Yam\'s');
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [showSlideIn, setShowSlideIn] = useState(false);
   const [selectedCombination, setSelectedCombination] = useState(null);
+  const [selectedPlayerId, setSelectedPlayerId] = useState(null);
 
   // Initialiser les scores pour chaque joueur
   useEffect(() => {
@@ -44,7 +44,6 @@ export default function JeuYams() {
         }, {});
       });
       setScores(initialScores);
-      setSelectedPlayer(players[0].id);
     }
   }, [players]);
 
@@ -52,31 +51,25 @@ export default function JeuYams() {
     if (!name.trim()) return;
     const newPlayer = { id: Date.now(), name };
     setPlayers([...players, newPlayer]);
-    setSelectedPlayer(newPlayer.id);
   };
 
   const removePlayer = (id) => {
     const newPlayers = players.filter(p => p.id !== id);
     setPlayers(newPlayers);
-    if (newPlayers.length > 0) {
-      setSelectedPlayer(newPlayers[0].id);
-    } else {
-      setSelectedPlayer(null);
-    }
   };
 
-  const updateScore = (combination, value) => {
-    if (!selectedPlayer) return;
+  const updateScore = (playerId, combination, value) => {
     setScores(prev => ({
       ...prev,
-      [selectedPlayer]: {
-        ...prev[selectedPlayer],
+      [playerId]: {
+        ...prev[playerId],
         [combination]: value
       }
     }));
   };
 
-  const handleScoreChipClick = (combination) => {
+  const handleScoreChipClick = (playerId, combination) => {
+    setSelectedPlayerId(playerId);
     setSelectedCombination(combination);
     setShowSlideIn(true);
   };
@@ -96,7 +89,7 @@ export default function JeuYams() {
   const resetGame = () => {
     setPlayers([]);
     setScores({});
-    setSelectedPlayer(null);
+    setSelectedPlayerId(null);
     setGameName('Partie de Yam\'s');
   };
 
@@ -110,28 +103,22 @@ export default function JeuYams() {
     }));
   };
 
-  const getScoreValue = (combination) => {
-    if (!selectedPlayer) return null;
-    return scores[selectedPlayer]?.[combination];
-  };
-
-  // Sélectionner un joueur
-  const selectPlayer = (playerId) => {
-    setSelectedPlayer(playerId);
+  const getScoreValue = (playerId, combination) => {
+    return scores[playerId]?.[combination];
   };
 
   return (
-    <div className="min-h-screen bg-[var(--bg)] p-4">
-      <div className="max-w-lg mx-auto">
+    <div className="min-h-screen bg-[var(--bg)] p-2 sm:p-4">
+      <div className="max-w-2xl mx-auto">
         {/* Décoration : orbite en haut à droite */}
         <div className="absolute top-0 right-0 w-64 h-64 opacity-20 pointer-events-none">
           <Orbite size={200} planetColor="var(--accent-2)" />
         </div>
 
         {/* En-tête */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-4">
           <h1
-            className="text-xl font-medium cursor-pointer"
+            className="text-lg sm:text-xl font-medium cursor-pointer"
             onClick={() => {
               const newName = prompt('Nouveau nom de partie:', gameName);
               if (newName) setGameName(newName);
@@ -142,7 +129,7 @@ export default function JeuYams() {
           <div className="flex gap-2">
             <button
               onClick={resetGame}
-              className="btn btn-secondary"
+              className="btn btn-secondary text-xs sm:text-sm"
               disabled={players.length === 0}
             >
               Réinitialiser
@@ -150,95 +137,87 @@ export default function JeuYams() {
           </div>
         </div>
 
-        {/* Sélecteur de joueurs */}
+        {/* Grille des joueurs - 2 colonnes sur mobile, 3+ sur desktop */}
         {players.length > 0 && (
-          <div className="mb-6">
-            <div className="flex gap-2 overflow-x-auto pb-2">
-              {players.map(player => (
-                <button
-                  key={player.id}
-                  onClick={() => selectPlayer(player.id)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedPlayer === player.id
-                      ? 'bg-[var(--accent-2)] text-[var(--on-accent)]'
-                      : 'bg-[var(--surface)] text-[var(--text)] hover:bg-[var(--line)]'
-                  }`}
-                >
-                  {player.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Fiche du joueur sélectionné */}
-        {selectedPlayer && players.length > 0 && (
-          <div className="card mb-6 max-w-[45vw] md:max-w-[400px]">
-            {/* Nom du joueur */}
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-medium">
-                {players.find(p => p.id === selectedPlayer)?.name}
-              </h2>
-              <button
-                onClick={() => resetPlayerScores(selectedPlayer)}
-                className="text-xs text-[var(--text-muted)] hover:text-[var(--text)]"
-              >
-                Réinitialiser scores
-              </button>
-            </div>
-
-            {/* Zones de scores par catégorie */}
-            <div className="space-y-4">
-              {Object.entries(YAMS_CATEGORIES).map(([category, combinations]) => (
-                <div key={category} className="bg-[var(--line)] p-4 rounded-xl">
-                  <h3 className="text-sm font-medium text-[var(--accent)] mb-3">{category}</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    {combinations.map(combo => {
-                      const currentValue = getScoreValue(combo);
-                      const isSelected = currentValue !== null;
-                      const isBarré = currentValue === 0;
-                      
-                      return (
-                        <button
-                          key={combo}
-                          onClick={() => handleScoreChipClick(combo)}
-                          className={`w-full py-2 px-3 rounded-full text-sm transition-all border ${
-                            isSelected && !isBarré
-                              ? 'bg-[var(--accent-2)] text-[var(--on-accent)] border-transparent'
-                              : isBarré
-                              ? 'bg-transparent border-[var(--accent-3)] text-[var(--accent-3)]'
-                              : 'bg-transparent border-[var(--line)] text-[var(--text)] hover:bg-[var(--line)]'
-                          }`}
-                        >
-                          <div className="flex justify-between items-center">
-                            <span>{combo}</span>
-                            {isSelected && !isBarré && (
-                              <span className="font-medium">+{currentValue}</span>
-                            )}
-                            {isBarré && (
-                              <span className="text-xs opacity-50">×</span>
-                            )}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 mb-4">
+            {players.map(player => (
+              <div key={player.id} className="card compact-card">
+                {/* Header du joueur */}
+                <div className="flex justify-between items-center mb-2">
+                  <h2 className="text-base font-medium truncate flex-1">{player.name}</h2>
+                  <button
+                    onClick={() => resetPlayerScores(player.id)}
+                    className="text-xs text-[var(--text-muted)] hover:text-[var(--accent-3)] ml-2"
+                    title="Réinitialiser scores"
+                  >
+                    ↻
+                  </button>
+                  <button
+                    onClick={() => removePlayer(player.id)}
+                    className="text-xs text-[var(--text-muted)] hover:text-[var(--accent-3)]"
+                    title="Supprimer joueur"
+                  >
+                    ×
+                  </button>
                 </div>
-              ))}
-            </div>
 
-            {/* Total */}
-            <div className="mt-4 pt-4 border-t border-[var(--line)] text-right">
-              <span className="font-medium">Total: </span>
-              <span className="text-[var(--accent-2)] font-bold text-xl">
-                {calculateTotal(selectedPlayer)}
-              </span>
-            </div>
+                {/* Scores par catégorie - très compact */}
+                <div className="space-y-2">
+                  {Object.entries(YAMS_CATEGORIES).map(([category, combinations]) => (
+                    <div key={category} className="bg-[var(--line)] p-2 rounded-lg">
+                      <h3 className="text-[0.65rem] sm:text-xs font-medium text-[var(--accent)] mb-1 truncate">
+                        {category}
+                      </h3>
+                      <div className="grid grid-cols-2 gap-1">
+                        {combinations.map(combo => {
+                          const currentValue = getScoreValue(player.id, combo);
+                          const isSelected = currentValue !== null;
+                          const isBarré = currentValue === 0;
+                          
+                          return (
+                            <button
+                              key={combo}
+                              onClick={() => handleScoreChipClick(player.id, combo)}
+                              className={`w-full py-1 px-2 rounded-full text-[0.7rem] sm:text-xs transition-all border ${
+                                isSelected && !isBarré
+                                  ? 'bg-[var(--accent-2)] text-[var(--on-accent)] border-transparent'
+                                  : isBarré
+                                  ? 'bg-transparent border-[var(--accent-3)] text-[var(--accent-3)]'
+                                  : 'bg-transparent border-[var(--line)] text-[var(--text)] hover:bg-[var(--line)]'
+                              }`}
+                              title={combo}
+                            >
+                              <div className="flex justify-between items-center">
+                                <span className="truncate">{combo}</span>
+                                {isSelected && !isBarré && (
+                                  <span className="font-medium text-[0.65rem]">+{currentValue}</span>
+                                )}
+                                {isBarré && (
+                                  <span className="text-[0.6rem] opacity-50">×</span>
+                                )}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Total */}
+                <div className="mt-2 pt-2 border-t border-[var(--line)] text-right">
+                  <span className="text-xs font-medium">Total: </span>
+                  <span className="text-[var(--accent-2)] font-bold">
+                    {calculateTotal(player.id)}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
         {/* Ajouter un joueur */}
-        <div className="mt-6">
+        <div className="mt-4">
           <form 
             onSubmit={(e) => { 
               e.preventDefault(); 
@@ -251,38 +230,42 @@ export default function JeuYams() {
               name="playerName"
               type="text"
               placeholder="Nom du joueur..."
-              className="flex-1 px-4 py-2 bg-[var(--surface)] text-[var(--text)] placeholder-[var(--text-muted)]"
+              className="flex-1 px-3 py-2 text-sm bg-[var(--surface)] text-[var(--text)] placeholder-[var(--text-muted)] rounded-full"
             />
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary px-4 py-2 text-sm">
               + Ajouter
             </button>
           </form>
         </div>
 
+        {/* Légende (optionnelle, peut être supprimée pour gagner de la place) */}
+        {players.length === 0 && (
+          <div className="mt-6 card text-center text-sm text-[var(--text-muted)]">
+            <p>Ajoute des joueurs pour commencer à compter les points</p>
+          </div>
+        )}
+
         {/* Slide-in pour la sélection des scores */}
         <SlideInScore
           isOpen={showSlideIn}
-          onClose={() => setShowSlideIn(false)}
+          onClose={() => {
+            setShowSlideIn(false);
+            setSelectedPlayerId(null);
+            setSelectedCombination(null);
+          }}
           combination={selectedCombination}
           onSelectScore={(value) => {
-            updateScore(selectedCombination, value);
+            if (selectedPlayerId && selectedCombination) {
+              updateScore(selectedPlayerId, selectedCombination, value);
+            }
             setShowSlideIn(false);
+            setSelectedPlayerId(null);
+            setSelectedCombination(null);
           }}
-          currentValue={selectedCombination ? getScoreValue(selectedCombination) : null}
+          currentValue={selectedCombination && selectedPlayerId 
+            ? getScoreValue(selectedPlayerId, selectedCombination) 
+            : null}
         />
-
-        {/* Légende */}
-        <div className="mt-8 card">
-          <h3 className="font-medium mb-4">Légende des points</h3>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            {Object.entries(YAMS_SCORES).map(([combo, points]) => (
-              <div key={combo} className="flex justify-between">
-                <span>{combo}:</span>
-                <span>{points} pts</span>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
