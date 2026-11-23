@@ -45,11 +45,14 @@ export default function SlideInScore({
   // Déterminer les options à afficher
   const getOptions = () => {
     if (DES_VALUES[combination]) {
-      // Pour les dés : afficher les multiples
-      return DES_VALUES[combination].map(value => ({
-        label: value,
-        value: value
-      }));
+      // Pour les dés : afficher 0 (barrer) + les multiples
+      return [
+        { label: 'Barrer (0)', value: 0 },
+        ...DES_VALUES[combination].map(value => ({
+          label: value,
+          value: value
+        }))
+      ];
     } else if (FIXED_SCORES[combination]) {
       // Pour les combinaisons fixes : 0 ou la valeur
       return [
@@ -57,10 +60,9 @@ export default function SlideInScore({
         { label: FIXED_SCORES[combination], value: FIXED_SCORES[combination] }
       ];
     } else {
-      // Pour Chance : valeur libre
+      // Pour Chance : 0 ou valeur libre
       return [
-        { label: 'Barrer (0)', value: 0 },
-        { label: 'Renseigner', value: null } // À gérer différemment
+        { label: 'Barrer (0)', value: 0 }
       ];
     }
   };
@@ -93,24 +95,32 @@ export default function SlideInScore({
         </div>
 
         {isChance ? (
-          <div className="space-y-3">
-            <p className="text-sm text-[var(--text-muted)] mb-2">
+          <div className="space-y-4">
+            <p className="text-sm text-[var(--text-muted)] text-center">
               Saisir le total des dés
             </p>
             <input
               type="number"
               value={selectedValue || ''}
               onChange={(e) => setSelectedValue(parseInt(e.target.value) || 0)}
-              className="w-full px-4 py-2 bg-transparent border border-[var(--line)] rounded-lg text-[var(--text)]"
-              placeholder="Total des dés"
+              className="w-full px-4 py-3 bg-[var(--line)] border border-[var(--line)] rounded-lg text-[var(--text)] text-center text-lg"
+              placeholder="0"
               min="0"
             />
-            <button
-              onClick={() => handleSelect(selectedValue || 0)}
-              className="btn btn-primary w-full mt-4"
-            >
-              Valider
-            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => handleSelect(0)}
+                className="py-3 px-4 rounded-lg text-sm font-medium transition-all bg-transparent border border-[var(--line)] text-[var(--text-muted)] hover:bg-[var(--line)]"
+              >
+                Barrer (0)
+              </button>
+              <button
+                onClick={() => handleSelect(selectedValue || 0)}
+                className="py-3 px-4 rounded-lg text-sm font-medium transition-all bg-[var(--accent-2)] text-[var(--on-accent)] hover:opacity-90"
+              >
+                Valider
+              </button>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-2">
@@ -121,7 +131,9 @@ export default function SlideInScore({
                 className={`py-3 px-4 rounded-lg text-sm font-medium transition-all ${
                   selectedValue === option.value
                     ? 'bg-[var(--accent-2)] text-[var(--on-accent)]'
-                    : 'bg-[var(--surface)] text-[var(--text)] hover:bg-[var(--line)]'
+                    : option.value === 0
+                    ? 'bg-transparent border border-[var(--accent-3)] text-[var(--accent-3)]'
+                    : 'bg-[var(--line)] text-[var(--text)] hover:bg-[var(--surface)]'
                 }`}
               >
                 {option.label}
