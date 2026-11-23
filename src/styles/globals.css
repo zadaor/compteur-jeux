@@ -244,3 +244,422 @@ a:hover {
   from { stroke-dashoffset: var(--circumference); }
   to { stroke-dashoffset: var(--offset); }
 }
+
+/* ===== YAMS SCORE SHEET STYLES ===== */
+.yams-container {
+  height: 100%;
+}
+
+.yams-container .app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 8px 8px;
+  gap: 8px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.yams-container header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: none;
+}
+
+.yams-container header h1 {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0 4px;
+  letter-spacing: -0.02em;
+}
+
+.yams-container .hb {
+  display: flex;
+  gap: 6px;
+}
+
+.yams-container button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 0;
+}
+
+.yams-container .pill {
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 0 14px;
+  font-size: 12px;
+  min-height: 40px;
+}
+
+.yams-container button:focus-visible,
+.yams-container input:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 1px;
+}
+
+.yams-container #tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  flex: none;
+  scrollbar-width: none;
+}
+
+.yams-container #tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.yams-container .tab {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 0 14px;
+  min-height: 40px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.yams-container .tab.on {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.yams-container .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.yams-container .tab.s0 .dot {
+  background: var(--accent-2);
+}
+
+.yams-container .tab.s1 .dot {
+  background: var(--accent-3);
+}
+
+.yams-container .tab.add {
+  color: var(--accent-2);
+  font-size: 18px;
+  padding: 0 16px;
+}
+
+.yams-container #panels {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.yams-container #panels::-webkit-scrollbar {
+  display: none;
+}
+
+.yams-container #panels > * {
+  flex: 0 0 calc(50% - 4px);
+  scroll-snap-align: start;
+}
+
+.yams-container button.empty {
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.yams-container .panel {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 8px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+}
+
+.yams-container .panel.p0 {
+  border-top: 3px solid var(--accent-2);
+}
+
+.yams-container .panel.p1 {
+  border-top: 3px solid var(--accent-3);
+}
+
+.yams-container .hd {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex: none;
+}
+
+.yams-container .nm {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg);
+  color: var(--text);
+  border: 0;
+  border-radius: 999px;
+  padding: 0 12px;
+  height: 32px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.yams-container .x {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--line);
+  font-size: 16px;
+  line-height: 1;
+  flex: none;
+}
+
+.yams-container .lead {
+  display: none;
+  background: var(--accent-2);
+  color: var(--on-accent);
+  border-radius: 999px;
+  font-size: 11px;
+  padding: 2px 8px;
+}
+
+.yams-container .lead.on {
+  display: inline-block;
+}
+
+.yams-container .tt {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  min-width: 36px;
+  text-align: right;
+}
+
+.yams-container .tiles {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.yams-container .t {
+  background: var(--bg);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: 0;
+  padding: 0;
+}
+
+.yams-container .t i {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--accent);
+}
+
+.yams-container .t b {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.yams-container .t.e b {
+  color: var(--line);
+}
+
+.yams-container .t.h {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.yams-container .t.h i {
+  color: var(--on-accent);
+}
+
+.yams-container .t.z b {
+  color: var(--accent-3);
+}
+
+.yams-container .t.s {
+  background: transparent;
+  border: 1px solid var(--line);
+}
+
+.yams-container .t.s.ok b {
+  color: var(--accent-2);
+}
+
+.yams-container .empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--line);
+  border-radius: 24px;
+  color: var(--accent);
+  font-size: 13px;
+  text-align: center;
+  padding: 12px;
+}
+
+.yams-container .ov {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 8, 30, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+  z-index: 5;
+}
+
+.yams-container .ov.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.yams-container .sl {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--surface);
+  border-radius: 28px 28px 0 0;
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  transform: translateY(105%);
+  visibility: hidden;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), visibility 0s 0.3s;
+  z-index: 6;
+}
+
+.yams-container .sl.open {
+  transform: none;
+  visibility: visible;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.yams-container .sh {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.yams-container .sh h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.yams-container .sub {
+  font-size: 12px;
+  color: var(--accent);
+  margin: 0 0 12px;
+}
+
+.yams-container .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.yams-container .chip {
+  background: var(--bg);
+  border-radius: 999px;
+  min-height: 48px;
+  padding: 0 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.yams-container .chip small {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.yams-container .chip.sel {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.yams-container .chip.sel small {
+  color: var(--on-accent);
+}
+
+.yams-container .chip.pk {
+  width: 48px;
+  padding: 0;
+}
+
+.yams-container .die {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 500;
+}
+
+.yams-container .sum {
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0 4px 8px;
+}
+
+.yams-container .act {
+  display: flex;
+  gap: 8px;
+}
+
+.yams-container .act button {
+  flex: 1;
+  min-height: 48px;
+  border-radius: 999px;
+  background: var(--bg);
+  font-size: 14px;
+}
+
+.yams-container .act .ok {
+  background: var(--accent-2);
+  color: var(--on-accent);
+  font-weight: 500;
+}
+
+.yams-container .act .no {
+  border: 1px solid var(--accent-3);
+  color: var(--accent-3);
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yams-container .sl,
+  .yams-container .ov {
+    transition: none;
+  }
+}
