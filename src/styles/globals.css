@@ -258,6 +258,7 @@ a:hover {
   gap: 8px;
   max-width: 640px;
   margin: 0 auto;
+  margin-top: 70px;
 }
 
 .yams-container header {
@@ -277,6 +278,7 @@ a:hover {
 .yams-container .hb {
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
 .yams-container button {
