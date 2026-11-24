@@ -248,6 +248,7 @@ a:hover {
 /* ===== YAMS SCORE SHEET STYLES ===== */
 .yams-container {
   min-height: 100vh;
+  position: relative;
 }
 
 .yams-container .app {
