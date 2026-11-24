@@ -292,6 +292,7 @@ a:hover {
   padding: 0 14px;
   font-size: 12px;
   min-height: 40px;
+  color: var(--text);
 }
 
 .yams-container button:focus-visible,
