@@ -1,3 +1,6 @@
+/* ===== 🔤 TYPOGRAPHIE ===== */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500&display=swap');
+
 /* ===== 🎨 TOKENS (Variables CSS) ===== */
 :root {
   /* Couleurs */
@@ -11,9 +14,6 @@
   --text-muted: #8F8BFF;    /* Texte secondaire */
   --on-accent: #14102B;     /* Texte sur fond coloré */
 }
-
-/* ===== 🔤 TYPOGRAPHIE ===== */
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500&display=swap');
 
 body {
   font-family: 'Sora', 'Space Grotesk', system-ui, sans-serif;
