@@ -270,6 +270,13 @@ export default function JeuYams() {
         <nav id="tabs" role="tablist" aria-label="Joueurs"></nav>
         <section id="panels"></section>
       </div>
+      <button 
+        className="home-float" 
+        onClick={() => window.location.href = "/"}
+        aria-label="Retour à l'accueil"
+      >
+        Accueil
+      </button>
       <div className="ov" id="ov"></div>
       <aside className="sl" id="sl" role="dialog" aria-modal="true" aria-labelledby="slt"></aside>
     </div>
