@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import JeuYams from './pages/JeuYams';
 import Jeu5000 from './pages/Jeu5000';
-import './styles/globals.css';
+import './index.css';
 
 function App() {
   return (

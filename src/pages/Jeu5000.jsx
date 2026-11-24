@@ -1,42 +1,29 @@
+import React from 'react';
+import Astre from '../components/Astre';
+
 export default function Jeu5000() {
   return (
-    <div className="min-h-screen bg-[var(--bg)] p-4">
-      <div className="max-w-4xl mx-auto text-center">
-        <div className="my-12">
-          <svg viewBox="0 0 200 200" className="w-64 h-64 mx-auto">
-            <circle cx="100" cy="100" r="92" fill="none" stroke="var(--line)" strokeWidth="1"/>
-            <circle cx="100" cy="100" r="66" fill="none" stroke="var(--line)" strokeWidth="1"/>
-            <circle cx="100" cy="100" r="38" fill="var(--accent)"/>
-            <circle cx="100" cy="100" r="9" fill="var(--bg)"/>
-            <g className="orb o1">
-              <circle cx="192" cy="100" r="9" fill="var(--accent-3)"/>
-            </g>
-            <g className="orb o2">
-              <circle cx="34" cy="100" r="7" fill="var(--accent-2)"/>
-              <circle cx="100" cy="34" r="4" fill="var(--text)"/>
-            </g>
-          </svg>
+    <main className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+      <header className="flex justify-between items-center p-4 pt-16">
+        <h1 className="text-2xl font-medium">5000</h1>
+      </header>
+      
+      <section className="flex flex-col items-center justify-center h-[calc(100vh-100px)] px-4">
+        <div className="text-center">
+          <div className="w-48 h-48 mx-auto mb-8">
+            <Astre size={200} />
+          </div>
+          
+          <h2 className="text-3xl font-medium mb-4">Jeu 5000</h2>
+          <p className="text-[var(--text-muted)] mb-8">
+            Page en développement
+          </p>
+          
+          <p className="text-sm text-[var(--text-muted)]">
+            Compteur de points pour le jeu de cartes 5000
+          </p>
         </div>
-        
-        <h1 className="text-4xl font-medium mb-8">
-          Jeu 5000
-        </h1>
-        <p className="text-[var(--text-muted)]">
-          Page en développement - Compteur de points pour le jeu de cartes 5000
-        </p>
-        
-        <div className="mt-20">
-          <svg viewBox="0 0 200 200" className="w-48 h-48 mx-auto">
-            <circle cx="100" cy="100" r="92" fill="none" stroke="var(--line)" strokeWidth="1"/>
-            <circle cx="100" cy="100" r="66" fill="none" stroke="var(--line)" strokeWidth="1"/>
-            <circle cx="100" cy="100" r="38" fill="var(--accent)"/>
-            <circle cx="100" cy="100" r="9" fill="var(--bg)"/>
-            <g className="orb o1">
-              <circle cx="192" cy="100" r="9" fill="var(--accent-2)"/>
-            </g>
-          </svg>
-        </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

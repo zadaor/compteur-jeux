@@ -1,83 +1,75 @@
-import { Link, useEffect } from 'react-router-dom';
+import React from 'react';
+import Astre from '../components/Astre';
+import GameCard from '../components/GameCard';
+import QRCodeDisplay from '../components/QRCodeDisplay';
 
 export default function Home() {
-  useEffect(() => {
-    const thButton = document.getElementById('th');
-    if (thButton) {
-      thButton.addEventListener('click', function() {
-        const h = document.documentElement;
-        h.setAttribute('data-theme', h.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-      });
-    }
-  }, []);
+  const currentUrl = window.location.href;
+  
   return (
-    <main className="home-app">
-      <div className="top">
-        <span className="tag">Soirée jeux de dés</span>
-        <button className="th" id="th" aria-label="Changer de thème">Thème</button>
-      </div>
+    <main className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+      {/* Navigation flottante */}
       
-      <h1>À quel jeu<br>on joue ?</h1>
-      
-      <div className="hero" aria-hidden="true">
-        <svg viewBox="0 0 200 200" className="orb-svg">
-          <circle cx="100" cy="100" r="92" fill="none" stroke="var(--line)" strokeWidth="1"/>
-          <circle cx="100" cy="100" r="66" fill="none" stroke="var(--line)" strokeWidth="1"/>
-          <circle cx="100" cy="100" r="38" fill="var(--accent)"/>
-          <circle cx="100" cy="100" r="9" fill="var(--bg)"/>
-          <g className="orb o1">
-            <circle cx="192" cy="100" r="9" fill="var(--accent-2)"/>
-          </g>
-          <g className="orb o2">
-            <circle cx="34" cy="100" r="7" fill="var(--accent-3)"/>
-            <circle cx="100" cy="34" r="4" fill="var(--text)"/>
-          </g>
-        </svg>
-      </div>
-      
-      <nav className="cards" aria-label="Jeux">
-        <div className="g">
-          <Link className="card y" to="/yams">
-            <svg className="die" viewBox="0 0 72 72" aria-hidden="true">
-              <rect x="2" y="2" width="68" height="68" rx="20" fill="var(--accent-2)"/>
-              <g fill="var(--on-accent)">
-                <circle cx="21" cy="21" r="5"/>
-                <circle cx="51" cy="21" r="5"/>
-                <circle cx="36" cy="36" r="5"/>
-                <circle cx="21" cy="51" r="5"/>
-                <circle cx="51" cy="51" r="5"/>
-              </g>
-            </svg>
-            <div className="txt">
-              <h2>Yam's</h2>
-              <p>Feuilles de score pour tous les joueurs</p>
-            </div>
-            <span className="go" aria-hidden="true">→</span>
-          </Link>
-          <Link className="hist" to="/yams">Historique des parties</Link>
-        </div>
-        
-        <div className="g">
-          <div className="card soon" role="group" aria-label="5000, bientôt disponible">
-            <svg className="die" viewBox="0 0 72 72" aria-hidden="true">
-              <rect x="2" y="2" width="68" height="68" rx="20" fill="var(--accent-3)"/>
-              <g fill="var(--on-accent)">
-                <circle cx="21" cy="21" r="5"/>
-                <circle cx="36" cy="36" r="5"/>
-                <circle cx="51" cy="51" r="5"/>
-              </g>
-            </svg>
-            <div className="txt">
-              <h2>5 000</h2>
-              <p>Le premier à 5 000 points gagne</p>
-            </div>
-            <span className="go">Bientôt</span>
+      {/* Hero Section */}
+      <section className="pt-24 pb-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="mb-4">
+            <span className="inline-block bg-[var(--surface)] rounded-full px-4 py-2 text-sm text-[var(--accent)] border border-[var(--line)]">
+              Soirée jeux de dés
+            </span>
           </div>
-          <span className="hist off">Historique des parties · bientôt</span>
+          
+          <h1 className="text-5xl md:text-7xl font-medium mb-12 leading-tight">
+            À quel jeu<br />
+            on joue ?
+          </h1>
+          
+          {/* Astre orbital */}
+          <div className="relative w-64 h-64 mx-auto mb-16">
+            <Astre size={250} />
+          </div>
+          
+          {/* QR Code */}
+          <div className="mb-16">
+            <QRCodeDisplay url={currentUrl} size={180} />
+          </div>
         </div>
-      </nav>
+      </section>
       
-      <p className="foot">Deux jeux, un seul endroit.</p>
+      {/* Games Grid */}
+      <section className="px-4 pb-16">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-medium mb-8 text-center">
+            Choisissez votre jeu
+          </h2>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Yam's Card */}
+            <GameCard
+              title="Yam's"
+              description="Feuilles de score pour tous les joueurs"
+              to="/yams"
+              color="var(--accent-2)"
+            />
+            
+            {/* 5000 Card */}
+            <GameCard
+              title="5000"
+              description="Le premier à 5000 points gagne"
+              to="/5000"
+              color="var(--accent-3)"
+              disabled={true}
+            />
+          </div>
+        </div>
+      </section>
+      
+      {/* Footer */}
+      <footer className="text-center py-8 px-4">
+        <p className="text-[var(--text-muted)] text-sm">
+          Deux jeux, un seul endroit.
+        </p>
+      </footer>
     </main>
   );
 }
