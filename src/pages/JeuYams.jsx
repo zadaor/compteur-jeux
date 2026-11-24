@@ -237,6 +237,10 @@ export default function JeuYams() {
       render();
     });
 
+    container.querySelector("#home").addEventListener("click", function() {
+      window.location.href = "/";
+    });
+
     container.querySelector("#th").addEventListener("click", function() {
       const h = document.documentElement;
       h.setAttribute("data-theme", h.getAttribute("data-theme") === "dark" ? "light" : "dark");
@@ -258,6 +262,7 @@ export default function JeuYams() {
         <header>
           <h1>Yam's</h1>
           <div className="hb">
+            <button className="pill" id="home" aria-label="Retour à l'accueil">Accueil</button>
             <button className="pill" id="th" aria-label="Changer de thème">Thème</button>
             <button className="pill" id="rs">Nouvelle partie</button>
           </div>
